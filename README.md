@@ -4,7 +4,7 @@ Author: Reed Gurchiek
 
 Contact: rgurchiek@gmail.com
 
-Dependencies:
+Dependencies: Matlab 2019 or later.
 
 ## Description
 
