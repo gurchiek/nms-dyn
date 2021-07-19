@@ -3,4 +3,8 @@ When calling session = setup(), VICON and AMTI are not properly appended to the 
 No problems for appending MC10 or APDM. 
 Evaluates fine outside of the function. 
 Evaluates fine within the setup.m function until it exits.
-A workaround is to manually append these after setup() is called in s1_musculoskeletal_geometry.m
+A workaround is to manually append these after setup() is called in s1_musculoskeletal_geometry.m (line 15)
+For example, add: 
+if session.dataImport.marker.options.directory(end) ~= 'N'; session.dataImport.marker.options.directory = [session.dataImport.marker.options.directory, filesep, 'VICON']; end
+if session.dataImport.forcePlate.options.directory(end) ~= 'I'; session.dataImport.forcePlate.options.directory = [session.dataImport.forcePlate.options.directory, filesep, 'AMTI']; end
+
