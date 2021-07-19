@@ -18,7 +18,7 @@ An example subject dataset is provided in the repository with a set of subject-s
 
 **A. Download:** download the nms-dyn package
 
-**B. Download:** download the [GPML toolbox](http://www.gaussianprocess.org/gpml/code/matlab/doc/)
+**B. Download:** download the [GPML toolbox](http://www.gaussianprocess.org/gpml/code/matlab/doc/). You can store the GPML folder anywhere. Just remember where you put it; you'll have to navigate to it and select it when it is needed (see Script 6 below).
 
 **C. Add path:** add the nms-dyn folder to the MATLAB path (with subfolders)
 
@@ -44,7 +44,7 @@ An example subject dataset is provided in the repository with a set of subject-s
 
   1. **Single frame visualization of MSK model:** run vis1_plot_body.m to visualize the musculoskeletal system configuration solved using inertial motion capture (from Script 3) at three different frames: foot contact, mid-stance, and foot off.
 
-  2. **Create a gif:** run vis2_gif.m to create a gif of the inertial motion capture solution to the musculoskeletal system kinematics during the stance phase.
+  2. **Create a gif:** run vis2_gif.m to create a gif of the inertial motion capture solution to the musculoskeletal system kinematics during the stance phase. The gif will be named walk_10.gif and will be stored in the s7_visualizations folder when complete.
 
   3. **Compare IMC and OMC:** run vis3_imc_ensembling.m to visualize and compare ensemble average time-series of joint and MTU kinematics.
 
