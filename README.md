@@ -24,7 +24,7 @@ An example subject dataset is provided in the repository with a set of subject-s
 
 **D. Run the scripts:** each script lives within a script-specific folder uniquely written for the example subject. These folders are listed below for each step and can be found in nms-dyn/project/subject_specific_scripts/S0040.
 
-* **Script 1: Calibrate MSK model:** navigate to script-specific folder s1_musculoskeletal_geometry. Run calibrate_musculoskeletal_geometry.m. When prompted to save, select 'Yes'.
+* **Script 1: Calibrate MSK model:** navigate to script-specific folder s1_musculoskeletal_geometry. Run calibrate_musculoskeletal_geometry.m. When prompted to save, select 'Yes'. Some Mac users may run into issues with this script. See known_issues.txt.
 
 * **Script 2: Inverse dynamics:** navigate to script-specific folder s2_inverse_dynamics. Run inverse_dynamics.m. When prompted to save, select 'Yes'.
 
