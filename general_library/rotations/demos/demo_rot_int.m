@@ -1,16 +1,19 @@
-%% demo_rot_int
+% demo script
+
 % demos different rotator integration methods:
 % (1) rectezoidal: r_next = r_now + dt * r_dot
 %       where r_dot is based on w_now or mean(w_now,w_next) (midpoint)
 % (2) exp: r_next = expm(A*dt) * r_now where r_dot = A * r_now
 %       only valid for direction cosines and quaternions
 % (3) ode45: runge kutta
-%
+
 % data (rot_int_vars.mat) includes quaternions (q), body fixed angular rate
-% (w), and time for S0040 Force Plate Walk 1 shank segment and q was
+% (w), and time for the shank segment of a person walking where q was
 % computed using constrained inverse kinematics (hinge knee, universal
 % ankle, ball hip, non-dislocating joints)
-%
+
+% angular rate is expressed in body frame
+
 % q is s.t. v_world = q * v_body * q_conj
 % w was determined by differentiating q using 5-point central difference
 % and smoothed
@@ -24,7 +27,7 @@ load('rot_int_vars.mat')
 n = size(q,2);
 
 % euler sequence
-seq = 'xzy';
+seq = 'yzx';
 
 % euler angles
 e = convq(q,seq);
@@ -47,12 +50,12 @@ qf_w = q_w(:,end);
 
 %% quaternion rectezoidal forward vs backward + zoh vs midpoint
 
-% quaternion, b2w, inbody, zoh, forward
+% quaternion, b2w, inbody, zoh, forward (rectangular)
 tic;
 qrectf = intqrect(qi,w,t,1,1,0,1);
 trectf = toc;
 
-% quaternion, b2w, inbody, midpoint, forward
+% quaternion, b2w, inbody, midpoint, forward (trapezoidal)
 tic;
 qtrpf = intqrect(qi,w,t,1,1,1,1);
 ttrpf = toc;
@@ -189,35 +192,39 @@ for k = 1:4
 end
     
 
-%% compare forward rect, exp, ode45
+%% compare forward trapezoidal, exp, ode45, midpoint
 
-% q
+% quaternion integrator
 qtrp = intqrect(qi,w,t,1,1,1,1);
 qexp = intqexp(qi,w,t,1,1,1,1);
 q45 = intqode45(qi,w,t,1,1,1,options);
 qmid = intqmid(qi,w,t,1,1,1);
 
+% convert to euler for comparison
 eqtrp = convq(qtrp,seq) * 180/pi;
 eqexp = convq(qexp,seq) * 180/pi;
 eq45 = convq(q45,seq) * 180/pi;
 eqmid = convq(qmid,seq) * 180/pi;
 
-% dcm (r)
+% convert to dcm and dc
 dcmi = convq(qi,'dcm');
 dci = dcm2dc(dcmi);
+
+% dc and dcm integrators
 dcexp = intdcexp(dci,w,t,1,1,1,1);
 rtrp = intdcmrect(dcmi,w,t,1,1,1,1);
 r45 = intdcmode45(dcmi,w,t,1,1,1,options);
 rmid = intdcmmid(dcmi,w,t,1,1,1);
 dcmid = intdcmid(dci,w,t,1,1,1);
 
+% convert to euler angles for comparison
 edcexp = convdcm(dc2dcm(dcexp),seq) * 180/pi;
 ertrp = convdcm(rtrp,seq) * 180/pi;
 er45 = convdcm(r45,seq) * 180/pi;
 ermid = convdcm(rmid,seq) * 180/pi;
 edcmid = convdcm(dc2dcm(dcmid),seq) * 180/pi;
 
-% euler angles
+% euler angle integrators
 ei = e(:,1);
 etrp = inteulerrect(ei,seq,w,t,1,1,1,1) * 180/pi;
 e45 = inteulerode45(ei,seq,w,t,1,1,1,options) * 180/pi;
