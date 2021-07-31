@@ -50,13 +50,13 @@ for k = 1:nmkr
         % ref vec
         ref_vec(:,j,k) = qrot(ref_q,ref_markers_world.(mkr{ind(j)}).position - ref_markers_world.(mkr{k}).position,'inverse'); % representation of ref vec i in body frame
         ref_mag(j,k) = vecnorm(ref_vec(:,j,k));
-        ref_vec(:,j,k) = normc(ref_vec(:,j,k));
+        ref_vec(:,j,k) = normalize(ref_vec(:,j,k),1,'norm');
 
         % disp vec
         temp_disp_vec = disp_markers_world.(mkr{ind(j)}).position - disp_markers_world.(mkr{k}).position;
         for f = 1:nframes
             if ~any(isnan(temp_disp_vec(:,f)))
-                temp_disp_vec(:,f) = normc(temp_disp_vec(:,f));
+                temp_disp_vec(:,f) = normalize(temp_disp_vec(:,f),1,'norm');
             end
             disp_vec{f}(:,j,k) = temp_disp_vec(:,f);
         end

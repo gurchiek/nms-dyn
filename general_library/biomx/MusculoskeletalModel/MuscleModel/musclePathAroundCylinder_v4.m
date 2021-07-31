@@ -22,12 +22,12 @@ function [mtuLength,vp] = musclePathAroundCylinder_v4(origin,insertion,axis,posi
 % simplify notation
 o = origin;
 i = insertion;
-a = normalize(axis);
+a = normalize(axis,1,'norm');
 p = position;
 
 % vectors
 v = o-i;
-vhat = normalize(v);
+vhat = normalize(v,1,'norm');
 n = p-i;
 
 % cos and sin of angle between v and a
@@ -45,7 +45,7 @@ h = n + tau * a; % vector from insertion to point on cylinder axis closes to lin
 r = radius;
 
 % muscle path plane
-y = normalize(cross(a,vhat)); % ellipse frame y axis
+y = normalize(cross(a,vhat),1,'norm'); % ellipse frame y axis
 oy = (v-h)'*y; % y coordinate of origin in ellipse frame
 
 % if y components larger than radius then doesnt touch

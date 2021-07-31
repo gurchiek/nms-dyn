@@ -37,10 +37,10 @@ body.segment.([side '_patella']).anatomical.basis(3).vector = zshank;
 % based on van Eijden 1985 data, patellar long axis is almost constant 20
 % degrees relative to patellar ligament (fig 4)
 q = [sind(20/2) * zshank; repmat(cosd(20/2),[1 size(zshank,2)])];
-body.segment.([side '_patella']).anatomical.basis(2).vector = normc(qrot(q,v));
+body.segment.([side '_patella']).anatomical.basis(2).vector = normalize(qrot(q,v),1,'norm');
 
 % orthogonalize for AP
-body.segment.([side '_patella']).anatomical.basis(1).vector = normc(cross(body.segment.([side '_patella']).anatomical.basis(2).vector,body.segment.([side '_patella']).anatomical.basis(3).vector));
+body.segment.([side '_patella']).anatomical.basis(1).vector = normalize(cross(body.segment.([side '_patella']).anatomical.basis(2).vector,body.segment.([side '_patella']).anatomical.basis(3).vector),1,'norm');
 
 % orientation
 body.segment.([side '_patella']).anatomical.orientation = convdcm(permute(cat(3,body.segment.([side '_patella']).anatomical.basis(1).vector, body.segment.([side '_patella']).anatomical.basis(2).vector, body.segment.([side '_patella']).anatomical.basis(3).vector),[1 3 2]),'q');

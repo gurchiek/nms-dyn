@@ -106,7 +106,7 @@ for l = 1:length(aloc)
     % calibration params
     model.accelerometer.(aloc{l}).meanMagnitude = mean(vecnorm(acc.trials.static.locations.(aloc{l}).accel.data(:,istill(1):istill(2))));
     model.accelerometer.(aloc{l}).magnitudeStandardDeviation = std(vecnorm(acc.trials.static.locations.(aloc{l}).accel.data(:,istill(1):istill(2)),2));
-    model.accelerometer.(aloc{l}).meanDirection = normc(mean(acc.trials.static.locations.(aloc{l}).accel.data(:,istill(1):istill(2)),2));
+    model.accelerometer.(aloc{l}).meanDirection = normalize(mean(acc.trials.static.locations.(aloc{l}).accel.data(:,istill(1):istill(2)),2),1,'norm');
     
 end
 

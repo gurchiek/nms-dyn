@@ -26,15 +26,15 @@ function [ r ] = triad(a,b)
 %% triad
 
 % reference attitude
-v1 = normc(a(:,1));
-v2 = normc(cross(a(:,1),a(:,2)));
-v3 = normc(cross(v1,v2));
+v1 = normalize(a(:,1),1,'norm');
+v2 = normalize(cross(a(:,1),a(:,2)),1,'norm');
+v3 = normalize(cross(v1,v2),1,'norm');
 Mref = [v1 v2 v3];
 
 % observation attitude
-w1 = normc(b(:,1));
-w2 = normc(cross(b(:,1),b(:,2)));
-w3 = normc(cross(w1,w2));
+w1 = normalize(b(:,1),1,'norm');
+w2 = normalize(cross(b(:,1),b(:,2)),1,'norm');
+w3 = normalize(cross(w1,w2),1,'norm');
 Mobs = [w1 w2 w3];
 
 % dcm

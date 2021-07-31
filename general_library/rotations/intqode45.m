@@ -49,7 +49,7 @@ end
 
 % integrate
 [~,q] = ode45(@(tk,q) qdot(tk,q,w,t,b2w,inbody),t,q0,options);
-q = normc(q');
+q = normalize(q',1,'norm');
 
 % flip back?
 if ~forward
@@ -62,7 +62,7 @@ end
 function dqdt = qdot(tk,q,w,t,b2w,inbody)
 
 omega = interp1(t,w',tk,'pchip')';
-q = normc(q);
+q = normalize(q,1,'norm');
 dqdt = qjac(q,b2w,inbody,1) * omega;
 
 end

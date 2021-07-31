@@ -36,10 +36,10 @@ for j = 1:n
     % orthogonalize if necessary
     v = [1 0 0]';
     for c = r+1:3
-        if c == 3; dcm(:,c) = normc(cross(dcm(:,1),dcm(:,2)));
+        if c == 3; dcm(:,c) = normalize(cross(dcm(:,1),dcm(:,2)),1,'norm');
         else
             if abs(dot(v,dcm(:,1))) >= 0.90; v = [0 1 0]'; end
-            dcm(:,2) = normc(cross(dcm(:,1),v));
+            dcm(:,2) = normalize(cross(dcm(:,1),v),1,'norm');
         end
     end
     

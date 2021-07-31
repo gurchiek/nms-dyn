@@ -1,4 +1,4 @@
-function trial = cartesian2JointAngleTorques(model,trial,options)
+function trial = cartesian2GeneralizedTorques(model,trial,options)
 
 % currently works with RLB1 model
 
@@ -93,7 +93,7 @@ hip_flexion_axis_world = qrot(pelvis.(cs).orientation,hip_flexion_axis_pelvis); 
 % taken through the first rotational dof (in this case hip flexion)
 hip_adduction_axis_pelvis = qrot(mpelvis.(cs).orientation,mhip.adduction.axis,'inverse');
 hip_adduction_axis_world = qrot(pelvis.(cs).orientation,hip_adduction_axis_pelvis);
-q = normc([hip_flexion_axis_world .* sind(hip.flexion.angle/2); cosd(hip.flexion.angle/2)]);
+q = normalize([hip_flexion_axis_world .* sind(hip.flexion.angle/2); cosd(hip.flexion.angle/2)],1,'norm');
 hip_adduction_axis_world = qrot(q,hip_adduction_axis_world);
 
 % hip internal rotation axis is fixed in thigh frame, get in world frame

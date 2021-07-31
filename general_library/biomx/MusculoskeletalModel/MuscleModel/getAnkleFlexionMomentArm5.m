@@ -32,7 +32,7 @@ n = size(qs,2);
 zero = zeros(1,n);
 
 % ankle angles
-qa = normc(qprod(qconj(qs),qf));
+qa = normalize(qprod(qconj(qs),qf),1,'norm');
 angle = asind(2 * qa(1,:) .* qa(2,:) + 2 * qa(3,:) .* qa(4,:));
 adductionAngle = asind(2 * qa(2,:) .* qa(3,:) + 2 * qa(1,:) .* qa(4,:));
 qx = [sind(adductionAngle/2); zero; zero; cosd(adductionAngle/2)];

@@ -159,8 +159,8 @@ for t = 1:length(tnames)
     stancetime = trial.(tnames{t}).(anl).events.footOffTime - trial.(tnames{t}).(anl).events.footContactTime;
     istill = staticndx(as(:,ifc:ifo),round(sf * stancetime / 4)) + ifc - 1;
     istart = round(mean(istill));
-    g_s = normc(mean(as(:,istill(1):istill(2)),2)); % world frame vertical in shank frame
-    axis = normc([g_s(3); 0; -g_s(1)]);
+    g_s = normalize(mean(as(:,istill(1):istill(2)),2),1,'norm'); % world frame vertical in shank frame
+    axis = normalize([g_s(3); 0; -g_s(1)],1,'norm');
     axis = sign(axis(3)) * axis; % make sure axis in same half plane as shank z
     angle = sign(g_s(1)) * acosd(g_s(2));
     qs0 = [axis*sind(angle/2); cosd(angle/2)];
@@ -172,8 +172,8 @@ for t = 1:length(tnames)
     qs(:,1:istart) = intqexp(qs0,ws(:,1:istart),stime(1:istart),1,1,1,0);
     
     % initialize mid stance thigh orientation
-    g_t = normc(mean(at(:,istill(1):istill(2)),2));
-    axis = normc([g_t(3); 0; -g_t(1)]);
+    g_t = normalize(mean(at(:,istill(1):istill(2)),2),1,'norm');
+    axis = normalize([g_t(3); 0; -g_t(1)],1,'norm');
     axis = sign(axis(3)) * axis;
     angle = sign(g_t(1)) * acosd(g_t(2));
     qt0 = [axis*sind(angle/2); cosd(angle/2)];

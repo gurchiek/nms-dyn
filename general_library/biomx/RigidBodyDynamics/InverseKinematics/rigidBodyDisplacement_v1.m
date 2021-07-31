@@ -50,13 +50,13 @@ for i = 1:size(ind,1)
     % ref vec
     ref_vec(:,i) = qrot(ref_q,ref_markers_world.(mkr{ind(i,2)}).position - ref_markers_world.(mkr{ind(i,1)}).position,'inverse'); % representation of ref vec i in body frame
     ref_mag(i) = vecnorm(ref_vec(:,i));
-    ref_vec(:,i) = normc(ref_vec(:,i));
+    ref_vec(:,i) = normalize(ref_vec(:,i),1,'norm');
     
     % disp vec
     temp_disp_vec = disp_markers_world.(mkr{ind(i,2)}).position - disp_markers_world.(mkr{ind(i,1)}).position;
     for col = 1:size(temp_disp_vec,2)
         if ~any(isnan(temp_disp_vec(:,col)))
-            temp_disp_vec(:,col) = normc(temp_disp_vec(:,col));
+            temp_disp_vec(:,col) = normalize(temp_disp_vec(:,col),1,'norm');
         end
     end
     disp_vec(:,i,:) = permute(temp_disp_vec,[1 3 2]); % make what was columns now be pages

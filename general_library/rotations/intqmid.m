@@ -45,7 +45,7 @@ function [ q ] = intqmid( q0, w, t, b2w, inbody, forward)
 % initialize
 n = size(w,2);
 q = zeros(4,n);
-q(:,1) = normc(q0);
+q(:,1) = normalize(q0,1,'norm');
 I4 = eye(4);
 
 % flip and negate time/angular rate if integrating backwards
@@ -65,7 +65,7 @@ for k = 1:n-1
     q(:,k+1) = (I4 - dt(k)/2 * A(:,:,k+1)) \ (I4 + dt(k)/2 * A(:,:,k)) * q(:,k);
     
     % normalize
-    q(:,k+1) = normc(q(:,k+1));
+    q(:,k+1) = normalize(q(:,k+1),1,'norm');
     
 end
 

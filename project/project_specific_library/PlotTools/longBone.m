@@ -1,8 +1,8 @@
 function cyl = longBone(inferiorPoint,superiorPoint,radius,color)
 
 center = mean([superiorPoint inferiorPoint],2);
-axis = normalize(superiorPoint - inferiorPoint);
-n = normalize(cross([0 0 1]',axis));
+axis = normalize(superiorPoint - inferiorPoint,1,'norm');
+n = normalize(cross([0 0 1]',axis),1,'norm');
 angle = acosd(dot(axis,[0 0 1]'));
 [x,y,z] = cylinder(radius);
 z = z * vecnorm(superiorPoint - inferiorPoint);

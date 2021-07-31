@@ -209,7 +209,7 @@ distance = vecnorm(thigh_point - p2);
 fprintf('-Knee JC in thigh to mid-malleolus in shank during motion should be constant distance (if perfect hinge, femoral condyle well approximated by cylinder, no translational DOF). SD is %f cm and range is %f cm\n',std(distance)*100,range(distance)*100);
 
 % average knee axis is final estimate
-kneeAxis = normc(mean([a1world,a2world],2));
+kneeAxis = normalize(mean([a1world,a2world],2),1,'norm');
 
 % knee center then defined as point on line that is closest to first guess
 % first guess in this case will be mean lat/med fem epicondyle

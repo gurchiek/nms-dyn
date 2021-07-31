@@ -49,7 +49,7 @@ model.ligament.right_patellar.local.anatomical.insertion.position = [3.57 34.74 
 % table 5: femoral condyle cylinder
 model.bodyContour.right_femoralCondyle.type = 'cylinder';
 model.bodyContour.right_femoralCondyle.position = [6.06 -40.22 -1.75]' / 100;
-model.bodyContour.right_femoralCondyle.axis = normalize([-0.37 0.04 0.93]');
+model.bodyContour.right_femoralCondyle.axis = normalize([-0.37 0.04 0.93]',1,'norm');
 model.bodyContour.right_femoralCondyle.radius = 2.46 / 100;
 model.bodyContour.right_femoralCondyle.segment = 'right_thigh';
 
@@ -59,10 +59,10 @@ model.joint.right_knee.position = [3.84 -40.78 1.38]' / 100;
 model.joint.right_ankle.position = [9.33 -81.36 3.14]' / 100;
 model.joint.right_femurPatellar.position = [3.51 -38.51 1.90]' / 100;
 
-model.joint.right_femurPatellar.flexion.axis = normalize([-0.465 0.024 0.885]');
-model.joint.right_knee.flexion.axis = normalize([-0.528 -0.107 0.843]');
-model.joint.right_ankle.flexion.axis = normalize([-0.73 -0.206 0.652]');
-model.joint.right_ankle.adduction.axis = normalize([-0.780 -0.223 -0.584]'); % subtalar
+model.joint.right_femurPatellar.flexion.axis = normalize([-0.465 0.024 0.885]',1,'norm');
+model.joint.right_knee.flexion.axis = normalize([-0.528 -0.107 0.843]',1,'norm');
+model.joint.right_ankle.flexion.axis = normalize([-0.73 -0.206 0.652]',1,'norm');
+model.joint.right_ankle.adduction.axis = normalize([-0.780 -0.223 -0.584]',1,'norm'); % subtalar
 
 % table 1: Horsman thesis, pg 141
 model.joint.right_hip.euler.xyz = [-0.07 0.05 0]';

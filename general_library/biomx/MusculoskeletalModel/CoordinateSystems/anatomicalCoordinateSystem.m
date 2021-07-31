@@ -20,9 +20,9 @@ midpsis = mean([model.marker.right_psis.position,model.marker.left_psis.position
 
 % foot
 model.segment.([side '_foot']).anatomical.position = model.joint.([side '_ankle']).position;
-model.segment.([side '_foot']).anatomical.basis(1).vector = normc(midmeta - model.marker.([side '_heel']).position);
-model.segment.([side '_foot']).anatomical.basis(2).vector = sideFlag * normc(cross(model.marker.([side '_metatarsal5']).position - model.marker.([side '_heel']).position, model.segment.([side '_foot']).anatomical.basis(1).vector));
-model.segment.([side '_foot']).anatomical.basis(3).vector = normc(cross(model.segment.([side '_foot']).anatomical.basis(1).vector,model.segment.([side '_foot']).anatomical.basis(2).vector));
+model.segment.([side '_foot']).anatomical.basis(1).vector = normalize(midmeta - model.marker.([side '_heel']).position,1,'norm');
+model.segment.([side '_foot']).anatomical.basis(2).vector = sideFlag * normalize(cross(model.marker.([side '_metatarsal5']).position - model.marker.([side '_heel']).position, model.segment.([side '_foot']).anatomical.basis(1).vector),1,'norm');
+model.segment.([side '_foot']).anatomical.basis(3).vector = normalize(cross(model.segment.([side '_foot']).anatomical.basis(1).vector,model.segment.([side '_foot']).anatomical.basis(2).vector),1,'norm');
 model.segment.([side '_foot']).anatomical.orientation = convdcm([model.segment.([side '_foot']).anatomical.basis(1).vector, model.segment.([side '_foot']).anatomical.basis(2).vector, model.segment.([side '_foot']).anatomical.basis(3).vector],'q');
 
 % position is ankle jc projected onto foot sagittal plane
@@ -32,9 +32,9 @@ model.segment.([side '_foot']).anatomical.position = model.marker.([side '_heel'
 
 % shank
 model.segment.([side '_shank']).anatomical.position = midmal;
-model.segment.([side '_shank']).anatomical.basis(2).vector = normc(midcon - midmal);
-model.segment.([side '_shank']).anatomical.basis(1).vector = normc(cross(model.segment.([side '_shank']).anatomical.basis(2).vector,model.joint.([side '_knee']).flexion.axis));
-model.segment.([side '_shank']).anatomical.basis(3).vector = normc(cross(model.segment.([side '_shank']).anatomical.basis(1).vector,model.segment.([side '_shank']).anatomical.basis(2).vector));
+model.segment.([side '_shank']).anatomical.basis(2).vector = normalize(midcon - midmal,1,'norm');
+model.segment.([side '_shank']).anatomical.basis(1).vector = normalize(cross(model.segment.([side '_shank']).anatomical.basis(2).vector,model.joint.([side '_knee']).flexion.axis),1,'norm');
+model.segment.([side '_shank']).anatomical.basis(3).vector = normalize(cross(model.segment.([side '_shank']).anatomical.basis(1).vector,model.segment.([side '_shank']).anatomical.basis(2).vector),1,'norm');
 model.segment.([side '_shank']).anatomical.orientation = convdcm([model.segment.([side '_shank']).anatomical.basis(1).vector, model.segment.([side '_shank']).anatomical.basis(2).vector, model.segment.([side '_shank']).anatomical.basis(3).vector],'q');
 
 % thigh
@@ -47,16 +47,16 @@ y = model.joint.([side '_hip']).position - midepi;
 y = y - model.segment.([side '_shank']).anatomical.basis(3).vector * (model.segment.([side '_shank']).anatomical.basis(3).vector' * y);
 
 % orthogonalize
-model.segment.([side '_thigh']).anatomical.basis(2).vector = normc(y);
-model.segment.([side '_thigh']).anatomical.basis(1).vector = normc(cross(y,model.segment.([side '_shank']).anatomical.basis(3).vector));
-model.segment.([side '_thigh']).anatomical.basis(3).vector = normc(cross(model.segment.([side '_thigh']).anatomical.basis(1).vector,model.segment.([side '_thigh']).anatomical.basis(2).vector));
+model.segment.([side '_thigh']).anatomical.basis(2).vector = normalize(y,1,'norm');
+model.segment.([side '_thigh']).anatomical.basis(1).vector = normalize(cross(y,model.segment.([side '_shank']).anatomical.basis(3).vector),1,'norm');
+model.segment.([side '_thigh']).anatomical.basis(3).vector = normalize(cross(model.segment.([side '_thigh']).anatomical.basis(1).vector,model.segment.([side '_thigh']).anatomical.basis(2).vector),1,'norm');
 model.segment.([side '_thigh']).anatomical.orientation = convdcm([model.segment.([side '_thigh']).anatomical.basis(1).vector, model.segment.([side '_thigh']).anatomical.basis(2).vector, model.segment.([side '_thigh']).anatomical.basis(3).vector],'q');
 
 % thigh
 model.segment.pelvis.anatomical.position = model.joint.([side '_hip']).position;
-model.segment.pelvis.anatomical.basis(3).vector = normc(model.marker.right_asis.position - model.marker.left_asis.position);
-model.segment.pelvis.anatomical.basis(2).vector = normc(cross(midpsis - model.marker.left_asis.position,model.segment.pelvis.anatomical.basis(3).vector));
-model.segment.pelvis.anatomical.basis(1).vector = normc(cross(model.segment.pelvis.anatomical.basis(2).vector,model.segment.pelvis.anatomical.basis(3).vector));
+model.segment.pelvis.anatomical.basis(3).vector = normalize(model.marker.right_asis.position - model.marker.left_asis.position,1,'norm');
+model.segment.pelvis.anatomical.basis(2).vector = normalize(cross(midpsis - model.marker.left_asis.position,model.segment.pelvis.anatomical.basis(3).vector),1,'norm');
+model.segment.pelvis.anatomical.basis(1).vector = normalize(cross(model.segment.pelvis.anatomical.basis(2).vector,model.segment.pelvis.anatomical.basis(3).vector),1,'norm');
 model.segment.pelvis.anatomical.orientation = convdcm([model.segment.pelvis.anatomical.basis(1).vector, model.segment.pelvis.anatomical.basis(2).vector, model.segment.pelvis.anatomical.basis(3).vector],'q');
 
 %% get local marker positions and generalized coordinates

@@ -39,9 +39,9 @@ side = options.side;
 
 % pelvis
 model.segment.pelvis.mechanical.position = model.joint.([side '_hip']).position;
-model.segment.pelvis.mechanical.basis(3).vector = normc(model.marker.right_asis.position - model.marker.left_asis.position);
-model.segment.pelvis.mechanical.basis(2).vector = normc(cross(mean([model.marker.right_psis.position, model.marker.left_psis.position],2) - model.marker.left_asis.position,model.segment.pelvis.mechanical.basis(3).vector));
-model.segment.pelvis.mechanical.basis(1).vector = normc(cross(model.segment.pelvis.mechanical.basis(2).vector,model.segment.pelvis.mechanical.basis(3).vector));
+model.segment.pelvis.mechanical.basis(3).vector = normalize(model.marker.right_asis.position - model.marker.left_asis.position,1,'norm');
+model.segment.pelvis.mechanical.basis(2).vector = normalize(cross(mean([model.marker.right_psis.position, model.marker.left_psis.position],2) - model.marker.left_asis.position,model.segment.pelvis.mechanical.basis(3).vector),1,'norm');
+model.segment.pelvis.mechanical.basis(1).vector = normalize(cross(model.segment.pelvis.mechanical.basis(2).vector,model.segment.pelvis.mechanical.basis(3).vector),1,'norm');
 model.segment.pelvis.mechanical.orientation = convdcm([model.segment.pelvis.mechanical.basis(1).vector, model.segment.pelvis.mechanical.basis(2).vector, model.segment.pelvis.mechanical.basis(3).vector],'q');
 
 % shank
@@ -49,8 +49,8 @@ model.segment.pelvis.mechanical.orientation = convdcm([model.segment.pelvis.mech
 model.segment.([side '_shank']).mechanical.position = model.joint.([side '_knee']).position;
 model.segment.([side '_shank']).mechanical.basis(3).vector = model.joint.([side '_knee']).flexion.axis;
 model.segment.([side '_shank']).mechanical.basis(1).vector = ...
-    normc(cross(mean([model.marker.([side '_medial_tibial_condyle']).position,model.marker.([side '_lateral_tibial_condyle']).position],2) - mean([model.marker.([side '_lateral_malleolus']).position,model.marker.([side '_medial_malleolus']).position],2),model.joint.([side '_knee']).flexion.axis));
-model.segment.([side '_shank']).mechanical.basis(2).vector = normc(cross(model.segment.([side '_shank']).mechanical.basis(3).vector,model.segment.([side '_shank']).mechanical.basis(1).vector));
+    normalize(cross(mean([model.marker.([side '_medial_tibial_condyle']).position,model.marker.([side '_lateral_tibial_condyle']).position],2) - mean([model.marker.([side '_lateral_malleolus']).position,model.marker.([side '_medial_malleolus']).position],2),model.joint.([side '_knee']).flexion.axis),1,'norm');
+model.segment.([side '_shank']).mechanical.basis(2).vector = normalize(cross(model.segment.([side '_shank']).mechanical.basis(3).vector,model.segment.([side '_shank']).mechanical.basis(1).vector),1,'norm');
 model.segment.([side '_shank']).mechanical.orientation = convdcm([model.segment.([side '_shank']).mechanical.basis(1).vector, model.segment.([side '_shank']).mechanical.basis(2).vector, model.segment.([side '_shank']).mechanical.basis(3).vector],'q');
 
 % thigh
@@ -66,8 +66,8 @@ model.segment.([side '_thigh']).mechanical.orientation = model.segment.([side '_
 model.segment.([side '_foot']).mechanical.position = model.joint.([side '_ankle']).position;
 model.segment.([side '_foot']).mechanical.basis(3).vector = model.joint.([side '_knee']).flexion.axis;
 hj = model.joint.([side '_ankle']).position - model.marker.([side '_heel']).position;
-model.segment.([side '_foot']).mechanical.basis(1).vector = normc( hj - (model.joint.([side '_knee']).flexion.axis' * hj) * model.joint.([side '_knee']).flexion.axis );
-model.segment.([side '_foot']).mechanical.basis(2).vector = normc(cross(model.segment.([side '_foot']).mechanical.basis(3).vector,model.segment.([side '_foot']).mechanical.basis(1).vector));
+model.segment.([side '_foot']).mechanical.basis(1).vector = normalize( hj - (model.joint.([side '_knee']).flexion.axis' * hj) * model.joint.([side '_knee']).flexion.axis,1,'norm');
+model.segment.([side '_foot']).mechanical.basis(2).vector = normalize(cross(model.segment.([side '_foot']).mechanical.basis(3).vector,model.segment.([side '_foot']).mechanical.basis(1).vector),1,'norm');
 model.segment.([side '_foot']).mechanical.orientation = convdcm([model.segment.([side '_foot']).mechanical.basis(1).vector, model.segment.([side '_foot']).mechanical.basis(2).vector, model.segment.([side '_foot']).mechanical.basis(3).vector],'q');
 
 %% get local marker positions and generalized coordinates

@@ -52,7 +52,7 @@ n = size(w,2);
 q = zeros(4,n);
 expA = zeros(4,4,n-1);
 expq = zeros(4,n-1);
-q(:,1) = normc(q0);
+q(:,1) = normalize(q0,1,'norm');
 
 % flip and negate time/angular rate if integrating backwards
 if ~forward
@@ -88,14 +88,14 @@ for k = 1:n-1
     % get quaternion exponential that solves state equation (assuming
     % constant angular rate) and convert to matrix
     halfangle = vecnorm(w(:,k)) * dt(k) / 2;
-    expq(:,k) = [normc(w(:,k)) * sin(halfangle); cos(halfangle)];
+    expq(:,k) = [normalize(w(:,k),1,'norm') * sin(halfangle); cos(halfangle)];
     expA(:,:,k) = qprodmat(expq(:,k),order);
     
     % step
     q(:,k+1) = expA(:,:,k) * q(:,k);
     
     % normalize
-    q(:,k+1) = normc(q(:,k+1));
+    q(:,k+1) = normalize(q(:,k+1),1,'norm');
     
 end
 

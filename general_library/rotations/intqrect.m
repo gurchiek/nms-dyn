@@ -53,7 +53,7 @@ function [ q ] = intqrect( q0, w, t, b2w, inbody, midpoint, forward)
 % initialize
 n = size(w,2);
 q = zeros(4,n);
-q(:,1) = normc(q0);
+q(:,1) = normalize(q0,1,'norm');
 
 % flip and negate time/angular rate if integrating backwards
 if ~forward
@@ -77,7 +77,7 @@ for k = 1:n-1
     q(:,k+1) = q(:,k) + dt(k) * qdot;
     
     % normalize
-    q(:,k+1) = normc(q(:,k+1));
+    q(:,k+1) = normalize(q(:,k+1),1,'norm');
     
 end
 

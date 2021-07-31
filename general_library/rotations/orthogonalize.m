@@ -17,7 +17,7 @@ function [ dcm ] = orthogonalize( dcm )
 %%  orthogonalize
 
 for k = 1:size(dcm,3)
-    [U,~,V] = svd(normc(dcm(:,:,k)));
+    [U,~,V] = svd(normalize(dcm(:,:,k)),1,'norm');
     dcm(:,:,k) = U*diag([1 1 det(U)*det(V)])*V'; 
 end
 

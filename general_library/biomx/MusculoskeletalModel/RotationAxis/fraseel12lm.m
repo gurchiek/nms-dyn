@@ -31,9 +31,9 @@ function [a1,a2] = fraseel12lm(w1,w2,a1,a2)
 %% fraseel12lm
 
 % convert cartesian to spherical coordinates (a1 and a2 unit length)
-a1 = normc(a1);
+a1 = normalize(a1,1,'norm');
 [phi1,theta1] = cart2sphere(a1);
-a2 = normc(a2);
+a2 = normalize(a2,1,'norm');
 [phi2,theta2] = cart2sphere(a2);
 
 % levenberg marquardt
@@ -46,8 +46,8 @@ n1 = [cos(x(1))*cos(x(2)); cos(x(1))*sin(x(2)); sin(x(1))];
 n2 = [cos(x(3))*cos(x(4)); cos(x(3))*sin(x(4)); sin(x(3))];
 
 % normalize and make sure in correct half plane
-a1 = sign(n1'*a1) * normc(n1);
-a2 = sign(n2'*a2) * normc(n2);
+a1 = sign(n1'*a1) * normalize(n1,1,'norm');
+a2 = sign(n2'*a2) * normalize(n2,1,'norm');
 
 end
 

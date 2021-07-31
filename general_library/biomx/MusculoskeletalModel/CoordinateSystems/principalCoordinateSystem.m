@@ -65,7 +65,7 @@ model.segment.([side '_foot']).mass = deleva('foot','mass',model.sex) * model.ma
 
 % length + com
 long = model.marker.right_toe_tip.position - model.marker.right_heel.position;
-x = normc(model.marker.right_metatarsal2.position - model.marker.right_heel.position);
+x = normalize(model.marker.right_metatarsal2.position - model.marker.right_heel.position,1,'norm');
 long = dot(long,x) * x;
 model.segment.([side '_foot']).length = vecnorm(long);
 model.segment.([side '_foot']).principal.endpoint.proximal = model.marker.right_heel.position;
@@ -80,8 +80,8 @@ model.segment.([side '_foot']).principal.inertiaTensor = model.segment.([side '_
 
 % frame composed of principal axes
 model.segment.([side '_foot']).principal.basis(1).vector = x;
-model.segment.([side '_foot']).principal.basis(3).vector = normc(cross(x,[0 1 0]'));
-model.segment.([side '_foot']).principal.basis(2).vector = normc(cross(model.segment.([side '_foot']).principal.basis(3).vector,model.segment.([side '_foot']).principal.basis(1).vector));
+model.segment.([side '_foot']).principal.basis(3).vector = normalize(cross(x,[0 1 0]'),1,'norm');
+model.segment.([side '_foot']).principal.basis(2).vector = normalize(cross(model.segment.([side '_foot']).principal.basis(3).vector,model.segment.([side '_foot']).principal.basis(1).vector),1,'norm');
 model.segment.([side '_foot']).principal.orientation = convdcm([model.segment.([side '_foot']).principal.basis(1).vector, model.segment.([side '_foot']).principal.basis(2).vector, model.segment.([side '_foot']).principal.basis(3).vector],'q');
 
 %% shank
@@ -104,8 +104,8 @@ model.segment.([side '_shank']).principal.inertiaTensor = model.segment.([side '
 
 % frame composed of principal axes
 model.segment.([side '_shank']).principal.basis(2).vector = -long/vecnorm(long);
-model.segment.([side '_shank']).principal.basis(1).vector = normc(cross(model.segment.([side '_shank']).principal.basis(2).vector,model.joint.([side '_knee']).flexion.axis));
-model.segment.([side '_shank']).principal.basis(3).vector = normc(cross(model.segment.([side '_shank']).principal.basis(1).vector,model.segment.([side '_shank']).principal.basis(2).vector));
+model.segment.([side '_shank']).principal.basis(1).vector = normalize(cross(model.segment.([side '_shank']).principal.basis(2).vector,model.joint.([side '_knee']).flexion.axis),1,'norm');
+model.segment.([side '_shank']).principal.basis(3).vector = normalize(cross(model.segment.([side '_shank']).principal.basis(1).vector,model.segment.([side '_shank']).principal.basis(2).vector),1,'norm');
 model.segment.([side '_shank']).principal.orientation = convdcm([model.segment.([side '_shank']).principal.basis(1).vector, model.segment.([side '_shank']).principal.basis(2).vector, model.segment.([side '_shank']).principal.basis(3).vector],'q');
 
 %% thigh
