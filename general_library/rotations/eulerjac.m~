@@ -3,12 +3,7 @@ function [ J ] = eulerjac(e,seq,b2w,inbody,inv)
 %   get 3 x 3 jacobian that maps euler angle time derivative to body frame
 %   angular rate or vice versa.
 %
-%   note that if euler angle time derivates are mapped to the cartesian
-%   angular rate in the world frame, then the columns of J are the axes
-%   corresponding to the respective euler angle rotations (ie, column 1 is
-%   rotation axis for seq(1), column 2 for seq(2), etc). Joint torques
-%   would be projected onto these axes to return generalized torques
-%   associated with the euler angles.
+%   note that if
 %
 %----------------------------------INPUTS----------------------------------
 %
