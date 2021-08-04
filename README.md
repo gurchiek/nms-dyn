@@ -4,7 +4,7 @@ Author: Reed Gurchiek
 
 Contact: rgurchiek@gmail.com
 
-Dependencies: Matlab 2019 or later. Matlab toolboxes: Optimization, Signal Processing, and Statistics and Machine Learning. [GPML Toolbox](http://www.gaussianprocess.org/gpml/code/matlab/doc/).
+Dependencies: Matlab toolboxes: Optimization, Signal Processing, and Statistics and Machine Learning. [GPML Toolbox](http://www.gaussianprocess.org/gpml/code/matlab/doc/).
 
 ## Description
 
