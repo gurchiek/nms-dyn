@@ -34,7 +34,7 @@ for m = 1:length(muscleNames)
     % current muscle being simulated
     curr_muscle = muscle.(muscleNames{m});
     
-    % give dynamic properties (mtu length/velocity, excitation, etc) to model muscle
+    % give dynamic properties (mtu length/velocity, excitation, etc) from model muscle
     curr_muscle = inherit(curr_muscle,model.muscle.(muscleNames{m}));
     
     % activation dynamics
@@ -80,8 +80,7 @@ for m = 1:length(muscleNames)
         end
 
     end
-    compTime = toc;
-    curr_muscle.contractionDynamicsSolutionTime = compTime;
+    curr_muscle.contractionDynamicsSolutionTime = toc;
     
     % instantaneous pennation angle
     curr_muscle.pennation = curr_muscle.pennationFunction(curr_muscle.fiberLength,curr_muscle);
