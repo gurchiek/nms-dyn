@@ -30,4 +30,4 @@ Functions are available to integrate rotator parameters given angular velocity t
 
 **3. Quaternion solution to Wahba's problem and TRIAD algorithm:** Shuster and Oh (1981) Three-axis attitude determination from vector observations, Journal of Guidance and Control, 4(1).
 
-**4. See the appendices of my dissertation for quaternion algebra, rotation parametrization, kinematics, and use in optimization-based optical motion capture:** [Gurchiek (2021) Towards remote gait analysis: Combining physics and probabilistic models for estimating human joint mechanics](https://scholarworks.uvm.edu/graddis/1350/).
+**4. See the appendices of my dissertation for quaternion algebra, quaternion-based vector rotation operation and parametrization of the corresponding rotation matrix, quaternion kinematics, and quaternion use in optimization-based optical motion capture:** [Gurchiek (2021) Towards remote gait analysis: Combining physics and probabilistic models for estimating human joint mechanics](https://scholarworks.uvm.edu/graddis/1350/).
