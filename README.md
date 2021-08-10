@@ -14,7 +14,7 @@ Also included are tools for constrained and unconstrained inverse kinematics usi
 
 ## Try it yourself
 
-An example subject dataset is provided in the repository with a set of subject-specific scripts for processing those data within the scope of a specific project. Scripts and functions that are subject-general, but specific to this project are also included. This project was focused on characterizing the mechanics of the knee joint and the associated muscles using two IMUs and three surface electrodes (more details [here: Gurchiek et al. (2021)](https://www.biorxiv.org/content/10.1101/2021.06.16.448524v1)). Here are step-by-step instructions:
+An example subject dataset is provided in the repository with a set of subject-specific scripts for processing those data within the scope of a specific project. Scripts and functions that are subject-general, but specific to this project are also included. This project was focused on characterizing the mechanics of the knee joint and the associated muscles using two IMUs and three surface electrodes (more details [here: Gurchiek et al. (2021)](https://ieeexplore.ieee.org/document/9507535)). Here are step-by-step instructions:
 
 **A. Download:** download the nms-dyn package
 
