@@ -6,6 +6,8 @@ Contact: rgurchiek@gmail.com
 
 Dependencies: Matlab toolboxes: Optimization, Signal Processing, and Statistics and Machine Learning. [GPML Toolbox](http://www.gaussianprocess.org/gpml/code/matlab/doc/).
 
+Please cite: R. D. Gurchiek, N. Donahue, N. M. Fiorentino and R. S. Mcginnis, "Wearables-Only Analysis of Muscle and Joint Mechanics: An EMG-Driven Approach," in IEEE Transactions on Biomedical Engineering, doi: 10.1109/TBME.2021.3102009.
+
 ## Description
 
 This repository provides MATLAB code for analyzing joint and muscle mechanics using only wearable sensors. We utilize a hybrid approach (referred to as IMC-GP) combining both physics-based simulation (IMU-driven musculoskeletal kinematics and EMG-driven muscle contraction dynamics) and machine learning (Gaussian process models of muscle synergy functions). More details about IMC-GP can be found in this [publication: Gurchiek et al. (2021)](https://ieeexplore.ieee.org/document/9507535). Details about Gaussian process models of muscle synergy functions can be found in this [publication: Gurchiek et al. (2020)](https://ieeexplore.ieee.org/document/9210846) and the [syner-gp toolbox](https://github.com/M-SenseResearchGroup/syner-gp).
