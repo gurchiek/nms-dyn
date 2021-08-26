@@ -15,7 +15,7 @@ nm = 100;
 
 % simulation time
 sf = 250; % sampling frequency
-tf = 1/6; % final time, swing time ~ 1/3 sec, this half of that (late swing = mid swing to foot contact)
+tf = 0.35/2; % final time, swing time ~ 0.35 s (Weyand '10, table 2), this half of that (late swing = mid swing to foot contact)
 t = 0:1/sf:tf;
 n = length(t);
 
@@ -29,10 +29,12 @@ phi0_mid = 20 * pi/180; % pennation angle at optimal length, fiorentino 14
 phi0_dist = 1.0 * phi0_mid; % at distal end
 phi0_prox = 1.0 * phi0_mid; % at proximal end
 e0_mid = 0.55; % muscle strain at max force
-e0_dist = 0.55; % at distal end
-e0_prox = 0.55; % at proximal end
+e0_dist = 1.0 * e0_mid; % at distal end
+e0_prox = 1.0 * e0_mid; % at proximal end
 ft0 = f0_mid; % scales normalized tendon force-length in hill model
 et0 = 0.04; % tendon strain when tendon force = ft0 (default = 0.04);
+fv = @fvdegroote; % force velocity function
+beta = 0.5; % damping coef
 
 % muscle excitation
 exc = zeros(1,n); % excitation time series
@@ -76,6 +78,8 @@ m(imid).implicitSolverOptions = odeset('RelTol',1e-6,'MaxStep',0.01,'Jacobian',@
 m(imid).maxTendonForce = ft0;
 m(imid).maxForceMuscleStrain = e0_mid;
 m(imid).maxForceTendonStrain = et0;
+m(imid).forceVelocityFunction = fv;
+m(imid).coefDamping = beta;
 
 % initialize count, indices, and handle even number comparments
 imid1 = imid;
@@ -135,8 +139,8 @@ m = sim(m,t);
 %% movie
 
 anim = getMovie(m,t,m(imid).maxForce);
-movie(anim,10,sf);
-movie(anim,5,sf/2);
+movie(anim,3,sf);
+movie(anim,2,sf/2);
 movie(anim,1,sf/4);
 movie(anim,1,sf/8);
 movie(anim,1,sf/16);
