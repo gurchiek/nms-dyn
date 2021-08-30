@@ -23,11 +23,11 @@ n = length(t);
 lts = 0.341; % tendon slack length, delp 90
 l0 = 0.109; % optimal fiber length, delp 90
 f0_mid = 720; % max force, delp 90
-f0_dist = 3.6/5.2 * f0_mid; % at distal end, fiorentino 14
-f0_prox = 2.3/5.2 * f0_mid; % at proximal end, fiorentino 14
-phi0_mid = 20 * pi/180; % pennation angle at optimal length, fiorentino 14
-phi0_dist = 1.0 * phi0_mid; % at distal end
-phi0_prox = 1.0 * phi0_mid; % at proximal end
+f0_dist = 10.36/11.48* f0_mid; % at distal end, from fiorentino 14 dist/mid ratio is (3.6*2.3)/(5.2*3.6), from Kawama 21 is 10.36/11.48 (ACSA)
+f0_prox = 6.96/11.48 * f0_mid; % at proximal end, from fiorentino 14 prox/mid ratio is (2.3*1.6)/(5.2*3.6), from Kawama 21 is 6.96/11.48 (ACSA)
+phi0_mid = 20 * pi/180; % pennation angle at optimal length, fiorentino 14/kellis 10
+phi0_dist = 18 * pi/180; % at distal end, kellis 10
+phi0_prox = 24 * pi/180; % at proximal end, kellis 10
 e0_mid = 0.55; % muscle strain at max force
 e0_dist = 1.0 * e0_mid; % at distal end
 e0_prox = 1.0 * e0_mid; % at proximal end
@@ -149,7 +149,7 @@ movie(anim,1,sf/32);
 %% plots
 
 figure
-for k = [1 imid nm]
+for k = 1:nm%[1 imid nm]
     subplot(1,2,1)
     hold on
     plot(t(t>=0),m(k).fiberLength(t>=0)/m(k).optimalFiberLength)
