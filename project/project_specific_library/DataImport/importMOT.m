@@ -105,6 +105,7 @@ option.dataDirectory = {'choose'};
 option.trialNames = {'all'};
 option.renameTrials = {0};
 option.transferMatrix = {eye(3)};
+option.lowPassCutoff = {0};
 option.newStartTime = {0};
 option.newEndTime = {inf};
 option.removeBias = {0};
@@ -300,17 +301,24 @@ for k = 1:numel(data.trialNames)
     fid = fopen(filename,'r');
 
     % num rows/columns
-    nRows = textscan(fid,'%s\n',1,'HeaderLines',2);
-    nRows = str2double(nRows{1}{1}(strfind(nRows{1}{1},'=')+1:end));
-    nColumns = textscan(fid,'%s\n');
-    nColumns = str2double(nColumns{1}{1}(strfind(nColumns{1}{1},'=')+1:end));
-    
+    within_header = true;
+    while within_header
+        this_row = fgets(fid);
+        if contains(this_row,'nRows')
+            nRows = str2double(this_row(strfind(this_row,'=')+1:end));
+        elseif contains(this_row,'nColumns')
+            nColumns = str2double(this_row(strfind(this_row,'=')+1:end));
+        elseif contains(this_row,'endheader')
+            within_header = false;
+        end
+    end
+
     % num force plates
     nPlates = (nColumns - 1)/9;
     data.trial.(trialName).nForcePlates = nPlates;
 
     % read data
-    dat = cell2mat(textscan(fid,[repmat('%f\t',[1, nColumns-1]) '%f\r\n'],nRows,'HeaderLines',4));
+    dat = cell2mat(textscan(fid,[repmat('%f\t',[1, nColumns-1]) '%f\r\n'],nRows,'HeaderLines',1));
     fclose(fid);
 
     % keep rows

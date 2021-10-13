@@ -148,6 +148,8 @@ fig=figure;
 
 % exp plus (thelen)
 muscle.passiveForceLengthFunction = @flpexpplus;
+muscle.passiveForceLengthShapeFactor = 5.0; % default
+muscle.maxForceMuscleStrain = 0.55; % default
 hold on
 [fn,dexpbias] = muscle.passiveForceLengthFunction(lm,muscle);
 plot(ln,fn,'k','LineWidth',2);
@@ -188,6 +190,11 @@ plot(strain*100,ftexpc,'k','LineWidth',2);
 muscle.tendonForceLengthFunction = @tflquadratic;
 ft = muscle.tendonForceLengthFunction(lm,lmtu,muscle);
 plot(strain*100,ft,'Color',softblack,'LineWidth',2);
+
+% exp-linear
+muscle.tendonForceLengthFunction = @tflexp;
+ft = muscle.tendonForceLengthFunction(lm,lmtu,muscle);
+plot(strain*100,ft,'Color',softblue,'LineWidth',2);
 
 % degroote
 muscle.tendonForceLengthFunction = @tfldegroote;

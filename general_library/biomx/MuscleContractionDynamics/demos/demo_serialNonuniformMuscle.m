@@ -4,54 +4,81 @@
 % nonuniform strains (a characteristic of the hamstrings in
 % sprinting)
 
+% following simulation, two plots are generated: local fiber strain and local
+% fiber force. Local fiber force really is the force at the cross section
+% of a local serial segment (unique to the snu model) and should be equal for
+% all local serial segments
+
 function [m,anim,t,sf] = demo_serialNonuniformMuscle()
 
 clear; close all; clc;
 
 %% SETTINGS
 
+% three scenarios:
+%   (1) passive, hill: set exc_on = 0 and nm = 1, notice the max fiber strain
+%   (2) active, hill: set exc_on = 1 and nm = 1, should see less peak fiber strain
+%   (3) active, snu: set exc_on = 1 and nm = 100, should see larger local strains than in single segment model (scenario 2)
+
 % set number of fibers in series
 nm = 100;
+exc_on = 1; % zero to turn off excitation (passive stretching)
+swing_only = 1;
+gif_name = ''; % leave empty if no gif to be saved
 
 % simulation time
 sf = 250; % sampling frequency
 tf = 0.35/2; % final time, swing time ~ 0.35 s (Weyand '10, table 2), this half of that (late swing = mid swing to foot contact)
-t = 0:1/sf:tf;
+if swing_only
+    t = 0:1/sf:tf;
+else
+    t = 0:1/sf:tf*1.2;
+end
 n = length(t);
+
+% muscle excitation
+exc = zeros(1,n); % excitation time series
+if swing_only
+    y = [0.1 0.3 0.6 0.5]; % fiorentino 2014
+    x = [0 0.5 0.75 1.0] * tf;
+else
+    y = [0.1 0.3 0.7 0.5 0.6 0.3]; % yu 2008
+    x = [0 0.5 0.75 1.0 1.1 1.2] * tf;
+end
+exc(t>=0) = exc_on * interp1(x,y,t(t>=0),'pchip');
+minexc = 0.01; % min excitation
 
 % muscle properties
 lts = 0.341; % tendon slack length, delp 90
-l0 = 0.109; % optimal fiber length, delp 90
+l0_mid = 0.109; % optimal fiber length, delp 90
 f0_mid = 720; % max force, delp 90
-f0_dist = 10.36/11.48* f0_mid; % at distal end, from fiorentino 14 dist/mid ratio is (3.6*2.3)/(5.2*3.6), from Kawama 21 is 10.36/11.48 (ACSA)
+f0_dist = 10.36/11.48 * f0_mid; % at distal end, from fiorentino 14 dist/mid ratio is (3.6*2.3)/(5.2*3.6), from Kawama 21 is 10.36/11.48 (ACSA)
 f0_prox = 6.96/11.48 * f0_mid; % at proximal end, from fiorentino 14 prox/mid ratio is (2.3*1.6)/(5.2*3.6), from Kawama 21 is 6.96/11.48 (ACSA)
-phi0_mid = 20 * pi/180; % pennation angle at optimal length, fiorentino 14/kellis 10
-phi0_dist = 18 * pi/180; % at distal end, kellis 10
-phi0_prox = 24 * pi/180; % at proximal end, kellis 10
+phi0_mid = 20 * pi/180; % pennation angle at optimal length, fiorentino 14/kellis 10 had 20
+phi0_dist = 18 * pi/180; % at distal end, kellis 10 had 18
+phi0_prox = 24 * pi/180; % at proximal end, kellis 10 had 24
 e0_mid = 0.55; % muscle strain at max force
-e0_dist = 1.0 * e0_mid; % at distal end
+e0_dist = 1.0 * e0_mid;% * e0_mid; % at distal end
 e0_prox = 1.0 * e0_mid; % at proximal end
 ft0 = f0_mid; % scales normalized tendon force-length in hill model
 et0 = 0.04; % tendon strain when tendon force = ft0 (default = 0.04);
 fv = @fvdegroote; % force velocity function
 beta = 0.5; % damping coef
 
-% muscle excitation
-exc = zeros(1,n); % excitation time series
-y = [0.1 0.3 0.6 0.5];
-x = [0 0.5 0.75 1.0] * tf;
-exc(t>=0) = interp1(x,y,t(t>=0),'pchip');
-minexc = 0.01; % min excitation
-
 %% MTU length
 
 % set MTU kinematics (is an input to dynamics)
-s0 = l0 * cos(phi0_mid);
+s0 = l0_mid * cos(phi0_mid);
 lmtu0 = lts + s0;
 
 % following was found to reproduce that by fiorentino 2014 late swing
-y = [0 0.085 0.04];
-x = [0 tf/2 tf];
+if swing_only
+    y = [0 0.085 0.04];
+    x = [0 tf/2 tf];
+else
+    y = [0 0.085 0.04 0.02];
+    x = [0 tf/2 tf 1.2*tf];
+end
 y = interp1(x,y,t(t>=0));
 y = bwfilt(y,10,sf,'low',4);
 lmtu(t>=0) = lmtu0 + lmtu0 * y;
@@ -70,8 +97,8 @@ m(imid).minExcitation = minexc;
 m(imid).excitation = exc;
 m(imid).maxForce = f0_mid;
 m(imid).tendonSlackLength = lts;
-m(imid).optimalFiberLength = l0/nm;
 m(imid).phi0 = phi0_mid;
+m(imid).optimalFiberLength = s0/nm/cos(m(imid).phi0);
 m(imid).mtu.length = bwfilt(lmtu,6,sf,'low',4);
 m(imid).mtu.velocity = fdiff(m(imid).mtu.length,t,5);
 m(imid).implicitSolverOptions = odeset('RelTol',1e-6,'MaxStep',0.01,'Jacobian',@impdynjac);
@@ -117,11 +144,13 @@ if count < nm
         % update region specific muscle properties
         m(iprox).maxForce = f0_prox + ((iprox - 1) / (imid1 - 1))^(1/1.5) * (f0_mid - f0_prox);
         m(iprox).phi0 = phi0_prox + (iprox - 1) / (imid1 - 1) * (phi0_mid - phi0_prox);
+        m(iprox).optimalFiberLength = s0/nm/cos(m(iprox).phi0);
         m(iprox).maxForceMuscleStrain = e0_prox + (iprox - 1) / (imid1 - 1) * (e0_mid - e0_prox);
         
         m(idist).maxForce = f0_dist + ((nm - idist) / (nm - imid2))^(1/1.5) * (f0_mid - f0_dist);
         m(idist).phi0 = phi0_dist + (nm - idist) / (nm - imid2) * (phi0_mid - phi0_dist);
-        m(idist).maxFoceMuscleStrain = e0_dist + (nm - idist) / (nm - imid2) * (e0_mid - e0_dist);
+        m(idist).optimalFiberLength = s0/nm/cos(m(idist).phi0);
+        m(idist).maxForceMuscleStrain = e0_dist + (nm - idist) / (nm - imid2) * (e0_mid - e0_dist);
         
         % increment
         iprox = iprox + 1;
@@ -146,23 +175,39 @@ movie(anim,1,sf/8);
 movie(anim,1,sf/16);
 movie(anim,1,sf/32);
 
+if ~isempty(gif_name)
+    filename = fullfile(cd,gif_name);
+    rate = 1/sf/32;
+    gif(anim,filename,rate);
+end
+
 %% plots
 
 figure
-for k = 1:nm%[1 imid nm]
+colors = parula(nm);
+for k = 1:nm
     subplot(1,2,1)
     hold on
-    plot(t(t>=0),m(k).fiberLength(t>=0)/m(k).optimalFiberLength)
+    plot(t(t>=0),m(k).fiberLength(t>=0)/m(k).optimalFiberLength,'Color',colors(k,:))
     subplot(1,2,2)
     hold on
-    plot(t(t>=0),m(k).muscleForce(t>=0))
+    plot(t(t>=0),m(k).muscleForce(t>=0),'k','LineWidth',1.5)
 end
-subplot(1,2,1)
+subplot(1,2,1);
 xlabel('Time (s)')
-ylabel('Norm Fib Len')
-subplot(1,2,2)
+ylabel('Norm Len')
+hold on
+plot(t(t>=0),lmtu(t>=0)/lmtu0,'k','LineWidth',1.5)
+
+sp = subplot(1,2,2);
 xlabel('Time (s)')
 ylabel('Fib Force (N)')
+yyaxis right
+hold on
+plot(t(t>=0),m(1).activation(t>=0),'r','LineWidth',2.0,'LineStyle',':')
+sp.YAxis(2).Limits = [0 1];
+sp.YAxis(2).Color = [0 0 0];
+sp.YAxis(2).Label.String = 'Activation';
 
 end
 
@@ -175,7 +220,8 @@ nm = length(m);
 
 % activation dynamics
 for k = 1:nm
-    m(k).activation = m(k).activationDynamics(t,m(k).excitation,m(k));
+%     m(k).activation = m(k).activationDynamics(t,m(k).excitation,m(k));
+    m(k).activation = m(k).excitation;
 end
 
 % initialize muscle state
@@ -385,6 +431,8 @@ diffwidth = maxwidth - minwidth;
 
 anim(n) = struct('cdata',[],'colormap',[]);
 figure;
+annot = annotation('textbox',[0.2054 0.6226 0.0848 0.0536],'String',['t = ' num2str(round(tm(1),4)) ' s'],'FitBoxToText','on');
+annot.EdgeColor = [1 1 1];
 for k = 1:n
     ind = find(t == tm(k));
 	x2 = 0;
@@ -400,7 +448,7 @@ for k = 1:n
     x1 = x2;
     x2 = m(1).mtu.length(ind);
     plot([x1 x2],[0 0],'k','LineWidth',2.0)
-    
+    annot.String = ['t = ' num2str(round(tm(k),4)) ' s'];
     ylim([-0.025 0.025])
     xlim([-0.025 maxl])
     pause(0.01)
@@ -432,5 +480,22 @@ c = hsv2rgb([x*0.675,0.9,0.9]);
 r = c(1);
 g = c(2);
 b = c(3);
+
+end
+
+function [] = gif(anim,filename,rate)
+
+for k = 1:length(anim)
+    frame = anim(k); 
+    im = frame2im(frame); 
+    [imind,cm] = rgb2ind(im,256); 
+    
+    % write out 
+    if k == 1
+      imwrite(imind,cm,filename,'gif','DelayTime',rate,'Loopcount',inf); 
+    else 
+      imwrite(imind,cm,filename,'gif','DelayTime',rate,'WriteMode','append'); 
+    end
+end
 
 end
