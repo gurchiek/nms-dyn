@@ -5,6 +5,8 @@ function [a,i,y,x] = rajagopalKnee(f)
 
 % rotation order: flexion, adduction, internal rotation
 
+% currently works for right leg only
+
 % knee angles for interpolation
 u = [0 0.174533 0.349066 0.523599 0.698132 0.872665 1.0472 1.22173 1.39626 1.5708 1.74533 1.91986 2.0944];
 
@@ -23,9 +25,5 @@ y = interp1(u,v,f,'pchip');
 % antero posterior (anterior positive), NEGATE for left leg
 v = [0 0.000988 0.001899 0.002734 0.003492 0.004173 0.004777 0.005305 0.005756 0.00613 0.006427 0.006648 0.006792];
 x = interp1(u,v,f,'pchip');
-
-% rajagopal doesnt model medio lateral translations (neither did walker but
-% lai arnold do???)
-
 
 end

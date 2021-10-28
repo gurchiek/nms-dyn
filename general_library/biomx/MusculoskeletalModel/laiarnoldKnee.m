@@ -6,6 +6,8 @@ function [a,i,y,x,z] = laiarnoldKnee(f)
 
 % rotation order: flexion, adduction, internal rotation
 
+% currently works for right leg only
+
 % knee angles for interpolation
 u = [0 0.174533 0.349066 0.523599 0.698132 0.872665 1.0472 1.22173 1.39626 1.5708 1.74533 1.91986 2.0944];
 
@@ -26,8 +28,8 @@ v = [0 0.001055 0.002061 0.00289 0.003447 0.003676 0.003559 0.00311 0.002373 0.0
 x = interp1(u,v,f,'pchip');
 
 % medio lateral (not specified in walker's paper and not in rajagopal...)
-% for right leg, positive is medial, for left leg, positive is lateral
-v = [0 5.3e-05 0.000188 0.000378 0.000597 0.000825 0.001045 0.001247 0.00142 0.001558 0.001661 0.001728 0.00176];
+% for right leg, positive is lateral, for left leg, positive is medial
+v = -[0 5.3e-05 0.000188 0.000378 0.000597 0.000825 0.001045 0.001247 0.00142 0.001558 0.001661 0.001728 0.00176];
 z = interp1(u,v,f,'pchip');
 
 end
