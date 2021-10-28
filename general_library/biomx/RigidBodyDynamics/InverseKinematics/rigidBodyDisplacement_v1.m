@@ -8,7 +8,8 @@ function [disp_q,disp_origin_world] = rigidBodyDisplacement_v1(ref_q,ref_origin_
 % and given the positions of the same markers in the displaced
 % configuration (disp_markers_world)
 
-% disp_q determined according to method in Markley or Shuster/Oh 81
+% disp_q determined according to method in Markley or Shuster/Oh 81,
+% weights reference vectors according to their length squared
 % disp_origin world as in Spoor and Veldpaus
 
 % INPUTS

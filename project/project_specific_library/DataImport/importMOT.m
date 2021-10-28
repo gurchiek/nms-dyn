@@ -302,6 +302,7 @@ for k = 1:numel(data.trialNames)
 
     % num rows/columns
     within_header = true;
+    nHeaderLines = 0;
     while within_header
         this_row = fgets(fid);
         if contains(this_row,'nRows')
@@ -311,15 +312,17 @@ for k = 1:numel(data.trialNames)
         elseif contains(this_row,'endheader')
             within_header = false;
         end
+        nHeaderLines = nHeaderLines + 1;
     end
+    fclose(fid);
+    nHeaderLines = nHeaderLines + 1; % b/c column headers are line after endheader
 
     % num force plates
     nPlates = (nColumns - 1)/9;
     data.trial.(trialName).nForcePlates = nPlates;
 
     % read data
-    dat = cell2mat(textscan(fid,[repmat('%f\t',[1, nColumns-1]) '%f\r\n'],nRows,'HeaderLines',1));
-    fclose(fid);
+    dat = readmatrix(filename,'FileType','text','NumHeaderLines',nHeaderLines,'OutputType','double','Delimiter','\t');
 
     % keep rows
     rows = dat(:,1) >= option.newStartTime{k} & dat(:,1) <= option.newEndTime{k};
