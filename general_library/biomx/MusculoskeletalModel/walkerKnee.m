@@ -1,4 +1,4 @@
-function [a,i,y,x,z,dadf,didf,dydf,dxdf,dzdf] = walkerKnee(f,side)
+function [a,i,y,x,z,dadf,didf,dydf,dxdf,dzdf,Rj] = walkerKnee(f,side)
 
 % Reed Gurchiek, 2021
 
