@@ -181,7 +181,7 @@ if ~isempty(varargin)
         elseif any(strcmpi(varargin{2*k-1},{'renameTrial','rename_trial','rename_trials'})); varargin{2*k-1} = 'renameTrials';
         elseif any(strcmpi(varargin{2*k-1},{'markerName','markers'})); varargin{2*k-1} = 'markerNames';
         elseif any(strcmpi(varargin{2*k-1},{'renameMarker','rename_marker','rename_markers'})); varargin{2*k-1} = 'renameMarkers';
-        elseif strcmpi(varargin{2*k-1},'report'); varargin{2*k-1} = 'reportStatus';
+        elseif any(strcmpi(varargin{2*k-1},{'report','status','report_status','statusReport','status_report'})); varargin{2*k-1} = 'reportStatus';
         elseif any(strcmpi(varargin{2*k-1},{'directory','dir','path'})); varargin{2*k-1} = 'dataDirectory';
         elseif any(strcmpi(varargin{2*k-1},{'markerTransformMatrix','markerTransform','marker_transform','transformMatrix','transform_matrix','transform','roation_matrix','rotation','rotationMatrix'})); varargin{2*k-1} = 'transferMatrix';
         elseif any(strcmpi(varargin{2*k-1},{'threshold','thresh','interpolationThreshold','splineThreshold','missingFramesThreshold'})); varargin{2*k-1} = 'missingDataThreshold';
@@ -601,15 +601,15 @@ for k = 1:numel(data.trialNames)
                 maxAllowMiss = repmat(threshold,[1 length(iWindow)]);
                 minAllowPrev = repmat(2,[1 length(iWindow)]);
                 minAllowPost = minAllowPrev;
-                if startMiss(1) == 1
+                if startMiss(1) <= 2
                     maxAllowMiss(1) = round(threshold/2); 
                     minAllowPost(1) = 4;
                     minAllowPrev(1) = 0;
                 end
-                if endMiss(end) == data.trial.(trialName).nFrames
+                if endMiss(end) >= data.trial.(trialName).nFrames - 1
                     maxAllowMiss(end) = round(threshold/2); 
-                    minAllowPost(1) = 0;
-                    minAllowPrev(1) = 4;
+                    minAllowPost(end) = 0;
+                    minAllowPrev(end) = 4;
                 end
 
                 % get can fix flags
