@@ -3,8 +3,6 @@ function [ data ] = importMOT(varargin)
 %
 %   importMOT imports force plate data in .mot format
 %
-%   filenames should be formatted like: trialName_ForcePlateName.mot
-%
 %--------------------------INPUTS-----------------------------------------
 %
 %   Name, Value pair:
@@ -130,8 +128,35 @@ if length(varargin) == 1
                 i = i + 2;
             end
         end
+        
+    % if char array, then must be a file path
+    elseif ischar(varargin{1})
+        
+        % verify is a .mot
+        if length(varargin{1}) <= 4
+            error('If only one input argument is a char array then must be a file path to a .mot file. The char array input is not a path to a .mot file.')
+        elseif ~strcmp(varargin{1}(end-3:end),'.mot')
+            error('If only one input argument is a char array then must be a file path to a .mot file. The char array input is not a path to a .mot file.')
+        else
+            % parse directory and file name, reformulate as Name, Value
+            % pair varargin
+            varargin1 = varargin{1}; varargin = cell(1,4);
+            ifilesep = regexp(varargin1,filesep);
+            if isempty(ifilesep)
+                varargin{1} = 'dataDirectory';
+                varargin{2} = '';
+                varargin{3} = 'trialNames';
+                varargin{4} = {varargin1(1:end-4)};
+            else
+                varargin{1} = 'dataDirectory';
+                varargin{2} = {varargin1(1:ifilesep(end))};
+                varargin{3} = 'trialNames';
+                varargin{4} = {varargin1(ifilesep(end)+1:end-4)};
+            end
+        end
+        
     else
-        error('If only one input argument then must be the option structure')
+        error('If only one input argument then must be the option structure or a char array specifying path to .mot file to import')
     end
     
 end
