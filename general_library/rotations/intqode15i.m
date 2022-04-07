@@ -1,6 +1,4 @@
 function [ q ] = intqode15i( q0, w, t, b2w, inbody, forward, options)
-%UNDER CONSTRUCTION: NEED TO CONVERT DAE TO ODE USING SYMBOLIC MATH TOOLBOX
-%SEE: reduceDifferentialOrder, Solve Differential Algebraic Equations
 %Reed Gurchiek, 2020
 %   intqode15i time integrates the quaternion q0 to provide the
 %   orientation at each time (t) given the angular rate (w) and the
@@ -8,7 +6,9 @@ function [ q ] = intqode15i( q0, w, t, b2w, inbody, forward, options)
 %
 %   system here is dynamic-algebraic, dynamic equations are the usual
 %   quaternion kinematic equation, the algebraic equation are the unit
-%   length constraint
+%   length constraint. Only the vector components of the quaternion are
+%   treated as dynamic variables, the scalar part is treated as an
+%   algebraic variable
 %
 %   q is s.t. its rotation operation is per: v2 = q * v1 * q_conj
 %   q(4,:) is the scalar part, q(1:3,:) is the x, y, z vector part
@@ -57,7 +57,6 @@ end
 options.Jacobian = @daesysjac;
 options.MassSingular = 'yes';
 [~,q] = ode15i(@daesys,t,q0,qstatemat(w(:,1),b2w,inbody) * q0,options,w,t,b2w,inbody);
-% q = normalize(q',1,'norm');
 q = q';
 
 % flip back?
@@ -74,7 +73,7 @@ omega = interp1(t,w',tk,'pchip')';
 res = zeros(4,1);
 z4 = qd - qstatemat(omega,b2w,inbody) * q; % quaternion kinematics
 res(1:3) = z4(1:3); % use only vector part for kinematics, scalar part treated as algebraic state in unit length constraint
-res(4) = (q' * q) - 1; % time derivative of unit length constraint
+res(4) = (q' * q) - 1; % unit length constraint
 
 end
 
@@ -90,7 +89,7 @@ dfdqd(1:3,1:3) = eye(3);
 dfdq = zeros(4,4);
 dfdq(4,:) = 2 * q';
 
-% jacobian of dynamic eq (first 4 dae sys eq) wrt q
+% jacobian of dynamic eq (first 3 dae sys eq) wrt q
 A = qstatemat(omega,b2w,inbody);
 dfdq(1:3,1:4) = -A(1:3,:);
 

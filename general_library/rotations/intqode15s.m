@@ -1,6 +1,4 @@
 function [ q ] = intqode15s( q0, w, t, b2w, inbody, forward, options)
-%UNDER CONSTRUCTION: NEED TO CONVERT DAE TO ODE USING SYMBOLIC MATH TOOLBOX
-%SEE: reduceDifferentialOrder, Solve Differential Algebraic Equations
 %Reed Gurchiek, 2020
 %   intqode15i time integrates the quaternion q0 to provide the
 %   orientation at each time (t) given the angular rate (w) and the
@@ -8,7 +6,9 @@ function [ q ] = intqode15s( q0, w, t, b2w, inbody, forward, options)
 %
 %   system here is dynamic-algebraic, dynamic equations are the usual
 %   quaternion kinematic equation, the algebraic equation are the unit
-%   length constraint
+%   length constraint. Only the vector components of the quaternion are
+%   treated as dynamic variables, the scalar part is treated as an
+%   algebraic variable
 %
 %   q is s.t. its rotation operation is per: v2 = q * v1 * q_conj
 %   q(4,:) is the scalar part, q(1:3,:) is the x, y, z vector part
@@ -45,7 +45,7 @@ function [ q ] = intqode15s( q0, w, t, b2w, inbody, forward, options)
 %       4xn time integrated quaternion array
 %
 %--------------------------------------------------------------------------
-%% intqode15i
+%% intqode15s
 
 % flip and negate time/angular rate if integrating backwards
 if ~forward
@@ -58,7 +58,6 @@ options.Jacobian = @daesysjac;
 options.Mass = [eye(3), zeros(3,1); zeros(1,4)];
 options.MassSingular = 'yes';
 [~,q] = ode15s(@daesys,t,q0,options,w,t,b2w,inbody);
-% q = normalize(q',1,'norm');
 q = q';
 
 % flip back?
