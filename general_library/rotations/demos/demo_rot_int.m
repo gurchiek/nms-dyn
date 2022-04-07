@@ -80,6 +80,16 @@ tic;
 q45f = intqode45(qi,w,t,1,1,1,options);
 t45f = toc;
 
+% 15i
+tic;
+q15if = intqode15i(qi,w,t,1,1,1,options);
+t15if = toc;
+
+% 15s
+tic;
+q15sf = intqode15s(qi,w,t,1,1,1,options);
+t15sf = toc;
+
 % compare
 figure
 subplot(4,2,1)
@@ -163,13 +173,15 @@ plot(qexpf(4,:)-q(4,:),'Color',softlightblue)
 plot(q45f(4,:)-q(4,:),'Color',softorange)
 ylabel('errors')
 
-type = {'rect-zoh-forward','rect-midpoint-forward','midpoint-approx-forward','expm-forward','runge-kutta'};
-comptimes = [trectf ttrpf tmidf texpf t45f];
+type = {'rect-zoh-forward','rect-midpoint-forward','midpoint-approx-forward','expm-forward','runge-kutta','15i','15s'};
+comptimes = [trectf ttrpf tmidf texpf t45f t15if t15sf];
 err = [rms(qrectf-q,2),...
        rms(qtrpf-q,2),...
        rms(qmidf-q,2),...
        rms(qexpf-q,2),...
-       rms(q45f-q,2)];
+       rms(q45f-q,2),...
+       rms(q15if-q,2),...
+       rms(q15sf-q,2)];
    
 [ct,i] = sort(comptimes,'ascend');
 fprintf('Computational Times: Quaternion Integrators (%d samples)\n',n)
@@ -198,12 +210,16 @@ end
 qtrp = intqrect(qi,w,t,1,1,1,1);
 qexp = intqexp(qi,w,t,1,1,1,1);
 q45 = intqode45(qi,w,t,1,1,1,options);
+q15i = intqode15i(qi,w,t,1,1,1,options);
+q15s = intqode15s(qi,w,t,1,1,1,options);
 qmid = intqmid(qi,w,t,1,1,1);
 
 % convert to euler for comparison
 eqtrp = convq(qtrp,seq) * 180/pi;
 eqexp = convq(qexp,seq) * 180/pi;
 eq45 = convq(q45,seq) * 180/pi;
+eq15i = convq(q15i,seq) * 180/pi;
+eq15s = convq(q15s,seq) * 180/pi;
 eqmid = convq(qmid,seq) * 180/pi;
 
 % convert to dcm and dc
@@ -323,10 +339,12 @@ plot(e45(3,:)-edeg(3,:),'Color',softlightblue)
 ylabel('Error (int - true)')
 
 % stats
-type = {'q-trap','q-exp','q-RK','q-mid','dcm-trap','dc-exp','dcm-RK','dcm-mid','dc-mid','euler-trap','euler-RK'};
+type = {'q-trap','q-exp','q-RK','q-15i','q-15s','q-mid','dcm-trap','dc-exp','dcm-RK','dcm-mid','dc-mid','euler-trap','euler-RK'};
 rmse = [rms(eqtrp-edeg,2),...
         rms(eqexp-edeg,2),...
         rms(eq45-edeg,2),...
+        rms(eq15i-edeg,2),...
+        rms(eq15s-edeg,2),...
         rms(eqmid-edeg,2),...
         rms(ertrp-edeg,2),...
         rms(edcexp-edeg,2),...

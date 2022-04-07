@@ -7,14 +7,15 @@ clc
 fd = 0:140;
 f = fd * pi / 180;
 
-% walker, assuming eqs were expressed in tibia frame (thus need to rotate)
+% walker, assuming eqs were expressed in tibia frame and thus are rotated
+% (by Rj) to express in thigh frame
 [aw,iw,yw,xw,zw,~,~,~,~,~,Rj] = walkerKnee(f,1);
 
 % rajagopal spline (will show this is the original, unrotated walker eqs
 % with an offset)
 [ar,ir,yr,xr,zr] = rajagopalKnee(f);
 
-% lai arnold spline (will more closeslly aligns with walker knee above,
+% lai arnold spline (will more closesly align with walker knee above,
 % they simply rotated rajagopal's translation using the joint rotation
 % matrix
 [al,il,yl,xl,zl] = laiarnoldKnee(f);

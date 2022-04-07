@@ -12,6 +12,9 @@ function [] = writeMOT(data)
 %           data.forcePlate(k).cop = 3 x nSamples COP data in meters
 %           data.forcePlate(k).torque = 3 x nSamples GRM data in NM
 %
+% header - (optional) cell array header lines, each cell element will be
+%          printed at the top of the file
+%
 %--------------------------------------------------------------------------
 %% writeMOT
 
@@ -33,7 +36,7 @@ for k = 1:data.nSamples
     fprintf(f,'%f',data.time(k));
     for j = 1:data.nForcePlates
         fprintf(f,'\t%f\t%f\t%f',data.forcePlate(j).force(1,k),data.forcePlate(j).force(2,k),data.forcePlate(j).force(3,k)); % GRF
-        fprintf(f,'\t%f\t%f\t%f',data.forcePlate(j).cop(1,k),data.forcePlate(j).cop(2,k),data.forcePlate(j).cop(2,k)); % COP
+        fprintf(f,'\t%f\t%f\t%f',data.forcePlate(j).cop(1,k),data.forcePlate(j).cop(2,k),data.forcePlate(j).cop(3,k)); % COP
         fprintf(f,'\t%f\t%f\t%f',data.forcePlate(j).torque(1,k),data.forcePlate(j).torque(2,k),data.forcePlate(j).torque(3,k)); % GRM
     end
     fprintf(f,'\n');

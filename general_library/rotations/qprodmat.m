@@ -17,7 +17,7 @@ function [ qmat ] = qprodmat( q, order )
 %----------------------------OUTPUTS---------------------------------------
 %
 %   qmat:
-%       4x4 matrix such that the quaternion product q*p is equivalent to
+%       4x4xn matrix such that the quaternion product q*p is equivalent to
 %       qmat*p if order = 1 or such that the quaternion product p*q is
 %       equivalent to qmat*p if order = 2
 %
