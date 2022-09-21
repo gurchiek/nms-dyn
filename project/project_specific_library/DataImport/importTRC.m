@@ -397,7 +397,8 @@ for k = 1:numel(data.trialNames)
         data.trial.(trialName).time = zeros(1,data.trial.(trialName).nFrames);
 
         % scalar to make units m
-        if strcmpi(data.trial.(trialName).originalMarkerUnits,'mm'); transferMatrix = 1/1000*option.transferMatrix{1}; end
+        transferMatrix = option.transferMatrix{1};
+        if strcmpi(data.trial.(trialName).originalMarkerUnits,'mm'); transferMatrix = transferMatrix / 1000; end
 
         % marker names are column titles, remove first two and empty cells
         ntrcmarkers = specs{4}(1);

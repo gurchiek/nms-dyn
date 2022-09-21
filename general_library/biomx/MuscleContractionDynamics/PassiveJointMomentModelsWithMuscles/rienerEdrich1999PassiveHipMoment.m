@@ -1,4 +1,4 @@
-function M = rienerEdrich1999PassiveHipMoment(knee_angle, hip_angle)
+function M = rienerEdrich1999PassiveHipMoment(hip_angle, knee_angle)
 
 % given knee_angle (flexion > 0), and hip_angle (flexion > 0), return the 
 % passive hip flexion moment due to all passive structures (including muscles, 

@@ -4,7 +4,7 @@ clear
 clc
 
 % knee angle
-fd = 0:140;
+fd = 0:160;
 f = fd * pi / 180;
 
 % walker, assuming eqs were expressed in tibia frame and thus are rotated
@@ -77,7 +77,7 @@ ylabel('Y [mm]')
 subplot(3,1,3)
 ylabel('Z [mm]')
 xlabel('Knee Flexion (\circ)')
-% leg = legend('walker-original','rajagopal-original','rajagopal-rotated','walker-rotated','laiArnold','2392-zeroed');
-% leg.Box = 'off';
-% leg.Location = 'southwest';
+leg = legend('walker-original','rajagopal-original','rajagopal-rotated','walker-rotated','laiArnold','2392-zeroed');
+leg.Box = 'off';
+leg.Location = 'southwest';
 

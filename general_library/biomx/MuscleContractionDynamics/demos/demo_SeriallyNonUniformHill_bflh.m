@@ -9,7 +9,7 @@
 % of a local serial segment (unique to the snu model) and should be equal for
 % all local serial segments
 
-function [m,anim,t,sf] = demo_serialNonuniformMuscle()
+function [m,anim,t,sf] = demo_SeriallyNonUniformHill_bflh()
 
 clear; close all; clc;
 

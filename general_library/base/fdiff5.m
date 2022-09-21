@@ -105,7 +105,7 @@ for r = 1:ndim
         
         % if non uniform grid
         if nt > 1
-            V = vander(time(i));
+            V = vander(time(i)-time(i(1)));
             p = V \ y; % coefs of interpolating quartic polynomial
             V1 = [V(:,2:4) * diag([4 3 2]), ones(5,1), zeros(5,1)];
             V2 = [V(:,3:4) * diag([12 6]), 2 * ones(5,1), zeros(5,2)];

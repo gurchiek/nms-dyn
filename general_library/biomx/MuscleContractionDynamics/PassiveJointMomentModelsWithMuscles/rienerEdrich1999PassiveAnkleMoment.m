@@ -1,4 +1,4 @@
-function M = rienerEdrich1999PassiveAnkleMoment(ankle_angle, knee_angle)
+function M = rienerEdrich1999PassiveAnkleMoment(knee_angle, ankle_angle)
 
 % given ankle dorsiflexion angle (plantarflexion < 0) and knee_angle
 % (flexion > 0), this function returns the passive ankle moment due to all
