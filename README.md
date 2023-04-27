@@ -2,8 +2,6 @@
 
 Author: Reed Gurchiek
 
-Contact: rgurchiek@gmail.com
-
 Dependencies: Matlab toolboxes: Optimization, Signal Processing, and Statistics and Machine Learning. [GPML Toolbox](http://www.gaussianprocess.org/gpml/code/matlab/doc/).
 
 Please cite: R. D. Gurchiek, N. Donahue, N. M. Fiorentino and R. S. Mcginnis, "Wearables-Only Analysis of Muscle and Joint Mechanics: An EMG-Driven Approach," in IEEE Transactions on Biomedical Engineering, doi: 10.1109/TBME.2021.3102009.
